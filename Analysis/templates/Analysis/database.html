@@ -1,0 +1,48 @@
+{% extends "Analysis/base.html" %}
+
+
+<!------ Include the above in your HEAD tag ---------->
+{% block content %}
+
+
+<br>
+
+			<form method="get">
+
+				{{filter.form}}
+
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+
+<br>
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Handle</th>
+			<th scope="col">Policy Claims Tracking</th>
+			<th scope="col">Tracking Library</th>
+      <th scope="col">Dangerous Permission</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for instance in object_list %}
+    <tr>
+          <!-- <p>{{ instance.link_text}} - <a href='uploads:results'>{{ instance.title }}</a></p> -->
+
+            <td>{{ instance.handle}}</td>
+            <td>{{ instance.privacy_policy_classification}}</td>
+						<td>{{instance.ThirdPartyTrackingLibrary}}</td>
+						<td>{{instance.dangerous_permission}}</td>
+
+
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,1 @@
+- Make Error Field in Database Model so you can store whatever error occurs

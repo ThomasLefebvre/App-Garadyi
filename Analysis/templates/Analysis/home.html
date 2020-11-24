@@ -1,0 +1,19 @@
+
+{% extends "Analysis/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<h2>What is the android handle for your APK?</h2>
+
+<body>
+<form class = "site-form" action="{% url 'please_wait' %}" method = "post" input type="text">
+  {% csrf_token %}
+  <label for="handle">Google Play Handle:</label>
+  <input type="text" id="handle" name="handle"><br><br>
+  <input type = "submit" value = "Analyse">
+
+</form>
+
+<text> Analysis will take a few minutes, please be patient... </text>
+</body>
+{% endblock content %}
