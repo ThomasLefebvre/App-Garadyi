@@ -8,14 +8,14 @@ def getPermissionsList(appID):
     manifestPATH = returnAPKManifestPath(appID)
     permissionList = []
     root = ET.parse(joinProjectPath(manifestPATH)).getroot()
-    print(manifestPATH)
-    print(root)
+    #print(manifestPATH)
+    #print(root)
     permissions = root.findall("uses-permission")
-    print(" in list maker")
-    print(permissions)
+    #print(" in list maker")
+    #print(permissions)
 
     for perm in permissions:
-        print(perm)
+        #print(perm)
         for att in perm.attrib:
             permissionList.append(perm.attrib[att])
 
@@ -24,10 +24,10 @@ def getPermissionsList(appID):
     for perm in permissionList:
         finalPerm = perm.rfind(".")
         actualPermission = perm[1+finalPerm:]
-        print("perm: "+perm)
-        print("actualPermission: "+actualPermission)
+        #print("perm: "+perm)
+        #print("actualPermission: "+actualPermission)
 
-        print(diction)
+        #print(diction)
         if actualPermission in diction:
             new = diction[actualPermission]
         else:
@@ -95,7 +95,7 @@ def getSmaliFolders(app_id):
         if 'smali' in item:
             list.append(os.path.join(path,item))
 
-    print("Smali Folders")
+    #print("Smali Folders")
     #print(list)
     return list
 
@@ -167,7 +167,7 @@ def returnSmaliKey(appID):
                     AnyTrackingLibrary = True
                 break
 
-    print("Final possibleLibrary")
+    #print("Final possibleLibrary")
     print(possibleLibrary)
     dictionary = {'library':possibleLibrary, 'libraryCategory':libraryCategory, 'TargetedAds':TargetedAds ,
     'MobileAnalytics':MobileAnalytics , 'Analytics':Analytics, 'AnyTrackingLibrary':AnyTrackingLibrary}
@@ -289,8 +289,8 @@ def makeCertificateFile(appID):
     CertFolder = os.path.join(apkFolder,   r"original\META-INF")
     CertFolderUserPath = os.path.join(filepaths_projectPath, CertFolder)
     RSAFileName = getRSAFile(CertFolderUserPath)
-    print("RSA File Name")
-    print(RSAFileName)
+    #print("RSA File Name")
+    #print(RSAFileName)
     RSAFilePath = os.path.join(CertFolderUserPath, RSAFileName)
 
 
@@ -302,8 +302,8 @@ def makeCertificateFile(appID):
     try:
         OpenSSLFolder = os.path.join(filepaths_projectPath, filepaths_OpenSSL)
         os.chdir(OpenSSLFolder)
-        print("RSA File Path")
-        print(RSAFilePath)
+        #print("RSA File Path")
+        #print(RSAFilePath)
         systemString = "openssl pkcs7 -inform DER -in "+RSAFilePath+" -out "+appID+"CertFile.txt  -print_certs -text"
         os.system(systemString)
 
@@ -316,3 +316,18 @@ def makeCertificateFile(appID):
     except Exception as e:
         print("No certificate file")
         print(e)
+
+def countDangerousPermissions(list):
+    count = 0
+    for element in list:
+        if element == 'dangerous':
+            count = count+1
+
+    return count
+
+def countTrackingLibraries(list):
+    count = 0
+    for element in list:
+        if "Targeted ads" == element or "Analytics" == element or "Mobile analytics" == element:
+            count = count+1
+    return count

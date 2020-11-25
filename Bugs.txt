@@ -1,1 +1,31 @@
+To Do
 - Make Error Field in Database Model so you can store whatever error occurs
+- record what category an app is in
+- include dynamic analysis
+- make cerificates downloadable and verified
+- make VT results downloadable in JSON
+
+App Garadyi ideas
+- make it so you can search in the database for different features
+- make a tool to run a list of apps
+- display each permission and tracking library in results and their risks
+- display what info each tracking library contains
+- allow people to upload apk files
+- include download timer
+
+Bugs
+- sometimes doesn't decompile apk on first attempt straight after downloading it
+- the meta-info card in results html sometimes has overlapping info when text is to long
+
+Future Work
+- do the same for iOS
+- make a privacy policy classification corpus with three clasffications (only with your consent, we do not share, we do share)
+
+
+example app ids
+- com.quhwa.health
+- com.daystrom.fbattery
+- ch.codematic.gymresttimer
+- au.org.mindthebump
+- bulat.diet.helper_ru
+- com.bluefish.BMICalculator

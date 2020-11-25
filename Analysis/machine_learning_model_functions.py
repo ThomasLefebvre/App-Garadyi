@@ -35,4 +35,8 @@ def PPShares3rdParty(text):
     return False
 
 def DetectLanguage(text):
-    return detect(text)
+    try:
+        language = detect(text)
+    except:
+        language = "N/A"
+    return language

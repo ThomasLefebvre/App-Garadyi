@@ -100,9 +100,9 @@ def download(link,app_id):
 
 def changeXAPKtoZIP(app_id):
 
-    xapkPATH = returnXAPKZIP(app_id)
-    apkPATH = returnAPKPath(app_id)
-    zipPATH = returnAPKZIP(app_id)
+    xapkPATH = joinProjectPath(returnXAPKZIP(app_id))
+    apkPATH = joinProjectPath(returnAPKPath(app_id))
+    zipPATH = joinProjectPath(returnAPKZIP(app_id))
 
     try:
         os.rename(xapkPATH, zipPATH)
@@ -148,11 +148,11 @@ def checkApkDownloaded(apkCode):
 
 def decompileAPK(apkCode):
     print(apkCode)
-    if os.path.exists(returnAPKPath(apkCode)):
-        os.chdir(filepaths_APKFolder)
+    if os.path.exists(joinProjectPath(returnAPKPath(apkCode))):
+        os.chdir(joinProjectPath(filepaths_APKFolder))
         os.system("java -jar apktool.jar d "+apkCode +".apk")
         print("Decompile path")
-        print(returnAPKFolder(apkCode))
+        print(joinProjectPath(returnAPKFolder(apkCode)))
         if os.path.exists(joinProjectPath(returnAPKFolder(apkCode))):
             return True
         else:
@@ -160,4 +160,5 @@ def decompileAPK(apkCode):
         return True
     else:
         print("apk does not exist")
+        print("path: "+str(returnAPKPath(apkCode)))
         return False

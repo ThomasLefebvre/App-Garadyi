@@ -32,7 +32,7 @@
     <tr>
           <!-- <p>{{ instance.link_text}} - <a href='uploads:results'>{{ instance.title }}</a></p> -->
 
-            <td>{{ instance.handle}}</td>
+            <td> <a href= "{% url 'results' instance.id %}" method = post>{{ instance.handle}}</td>
             <td>{{ instance.privacy_policy_classification}}</td>
 						<td>{{instance.ThirdPartyTrackingLibrary}}</td>
 						<td>{{instance.dangerous_permission}}</td>

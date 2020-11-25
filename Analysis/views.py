@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from .download_and_decompile import download_apk, decompileAPK
 from .forms import CreateAndroidApp
@@ -22,6 +22,7 @@ def home(request):
     return render(request, 'Analysis/home.html')
 
 def please_wait(request):
+    
     appID = request.POST.get("handle")
 
     NewAndroidApp = AndroidApp(handle = appID)
@@ -38,7 +39,7 @@ def please_wait(request):
     #decompiles APK
     NewAndroidApp.decompile_successful = decompileAPK(appID)
     #gets permissions
-    
+
     permissionList = getPermissionsList(appID)
     NewAndroidApp.PermissionsList = permissionList.get('PermissionList')
     NewAndroidApp.PermissionsProtectionLevelList = permissionList.get('ProtectionLevelList')
@@ -52,7 +53,7 @@ def please_wait(request):
     thirdPartyReults = returnSmaliKey(appID)
     NewAndroidApp.ThirdPartyLibraryList = thirdPartyReults.get('library')
     NewAndroidApp.ThirdPartyLibraryCategoryList = thirdPartyReults.get('libraryCategory')
-    if "Targeted ads" in thirdPartyReults.get('libraryCategory') or "Analytics" in thirdPartyReults.get('libraryCategory') or "Mobile Analytics" in thirdPartyReults.get('libraryCategory'):
+    if "Targeted ads" in thirdPartyReults.get('libraryCategory') or "Analytics" in thirdPartyReults.get('libraryCategory') or "Mobile analytics" in thirdPartyReults.get('libraryCategory'):
         NewAndroidApp.ThirdPartyTrackingLibrary = True
     else:
         NewAndroidApp.ThirdPartyTrackingLibrary = False
@@ -100,8 +101,8 @@ def please_wait(request):
     NewAndroidApp.save()
 
 
-
-    return render(request, 'Analysis/please_wait.html')
+    instance_id = NewAndroidApp.id
+    return redirect(reverse("results", kwargs={'id': instance_id}))
 
 def database(request):
     print("in database")
@@ -114,7 +115,7 @@ def database(request):
     test = "normie"
     #print("filter: ")
     #print(filter)
-    #queryset = filter.qs
+    queryset = filter.qs
     #print("queryset: ")
     #print(queryset)
 
@@ -126,16 +127,42 @@ def database(request):
 
     return render(request, 'Analysis/database.html', context)
 
+def results(request, id):
+
+    obj = AndroidApp.objects.get(id=id)
+    try:
+        VT_ratio = str(100*int(obj.VT_positive_engines)/int(obj.VT_total_engines))
+    except:
+        VT_ratio = "Unknown"
+
+    try:
+        rating_ratio = str(100*float(obj.meta_info_rating)/int(5))
+    except:
+        rating_ratio = "Unknown"
+
+    numberDangerousPermissions = str(countDangerousPermissions(obj.PermissionsProtectionLevelList))
+    numberTrackingLibraries = str(countTrackingLibraries(obj.ThirdPartyLibraryCategoryList))
+
+    context = {'instance': obj,
+    'VT_ratio': VT_ratio,
+    'rating_ratio':rating_ratio,
+    'numberDangerousPermissions':numberDangerousPermissions,
+    'numberTrackingLibraries':numberTrackingLibraries
+    }
+
+    return render(request, 'Analysis/results.html', context)
+
+
 
 def getObject(request, id):
     obj = AndroidApp.objects.get(pk=id)
     data = serializers.serialize('json', [obj,])
-    serialJSON = data
-    jsonFile = open(joinProjectPath(returnJsonDumps('test')), "w")
-    json.dump(serialJSON, jsonFile, indent = 2)
-    jsonFile.close()
-    struct = json.loads(data)
-    data = json.dumps(struct[0])
+    print("data: "+data)
+    with open("dict_to_json_textfile.txt", 'w') as fout:
+        json_dumps_str = json.dumps(data, indent=4)
+        print(json_dumps_str, file=fout)
+
+
     return HttpResponse(data, mimetype='application/json')
 
 # Create your views here.

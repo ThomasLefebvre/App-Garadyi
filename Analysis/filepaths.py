@@ -44,4 +44,4 @@ def returnXAPKZIP(app_id):
     return r"APKDownloads\%s.xapk"%app_id
 
 def returnJsonDumps(app_id):
-    return r"JsonDumps\%s.txt"%app_id
+    return r"JsonDumps\%s.json"%app_id
